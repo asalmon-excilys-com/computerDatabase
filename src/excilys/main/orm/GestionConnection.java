@@ -18,17 +18,17 @@ public class GestionConnection {
 		return INSTANCE;
 	}
 
-	public static Connection setConnection() {
+	public Connection setConnection() {
 		Connection conn = null;
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			String url = "jdbc:mysql://localhost:3306/computerDatabase";
 			conn = DriverManager.getConnection(url, "root", "root");
 
-		} catch (Exception e) {
-			// e.printStackTrace();
-			System.out.println("Problèmes rencontrés: " + e);
+		} catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 		}
 
 		return conn;
@@ -40,7 +40,6 @@ public class GestionConnection {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Problèmes rencontrés: " + e);
 		}

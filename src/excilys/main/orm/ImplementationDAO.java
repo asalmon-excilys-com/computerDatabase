@@ -7,24 +7,25 @@ import java.sql.Statement;
 
 public class ImplementationDAO implements InterfaceDAO {
 
-	private ImplementationDAO() {
+	public ImplementationDAO() {
+		super();
 	}
 
-	private static ImplementationDAO INSTANCE = null;
-
-	public static ImplementationDAO getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ImplementationDAO();
-		}
-		return INSTANCE;
-	}
+//	private static ImplementationDAO INSTANCE = null;
+//
+//	public static ImplementationDAO getInstance() {
+//		if (INSTANCE == null) {
+//			INSTANCE = new ImplementationDAO();
+//		}
+//		return INSTANCE;
+//	}
 
 	@Override
 	public ResultSet getListProduits(Connection conn) {
 
 		ResultSet results = null;
 		Statement stmt;
-		String sql = "Select * from computer";
+		String sql = "Select * from computer order by id";
 
 		try {
 			stmt = conn.createStatement();
