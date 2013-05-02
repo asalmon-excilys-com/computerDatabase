@@ -9,14 +9,14 @@
 		<description>
 		</description>
 		<display-name>
-		TableauComputer</display-name>
-		<servlet-name>TableauComputer</servlet-name>
+		TableauComputerServlet</display-name>
+		<servlet-name>TableauComputerServlet</servlet-name>
 		<servlet-class>
-		excilys.main.web.TableauComputer</servlet-class>
+		excilys.main.web.TableauComputerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>TableauComputer</servlet-name>
-		<url-pattern>/TableauComputer</url-pattern>
+		<servlet-name>TableauComputerServlet</servlet-name>
+		<url-pattern>/TableauComputerServlet</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

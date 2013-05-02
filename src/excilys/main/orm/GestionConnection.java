@@ -28,7 +28,7 @@ public class GestionConnection {
 
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			System.out.println("Problèmes rencontrés GestionConnection.setConnection: " + e);
 		}
 
 		return conn;
