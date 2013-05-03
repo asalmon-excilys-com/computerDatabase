@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import excilys.main.orm.GestionConnection;
 import excilys.main.orm.ImplementationDAO;
 import excilys.main.pojo.Computer;
@@ -42,26 +41,37 @@ public class TableauComputerServlet extends HttpServlet {
 		ImplementationService implServ = ImplementationService
 				.getImplementationService();
 
-		Integer p;
-		if (request.getParameter("p") == null) {
-			p = 1;
-		} else {
+		Integer s = 0;
+		if (request.getParameter("s") != null) {
+			s = Integer.parseInt(request.getParameter("s"));
+		}
+
+		Integer p = 0;
+		if (request.getParameter("p") != null) {
 			p = Integer.parseInt(request.getParameter("p"));
+		}
+
+		String f = "";
+		String clause ="%";
+		if (request.getParameter("f") != null) {
+			f = request.getParameter("f");
+			clause = "%"+f+"%";
 		}
 
 		Connection conn;
 		conn = gesCo.setConnection();
 		ResultSet rs;
+		Integer tailleTable = 0;
 		Integer starter;
-		if (p == 1) {
-			rs = implDAO.getListComputersSlice(conn, 1);
-			starter = 1;
-		} else {
-			starter = p * 10 + 1;
-			rs = implDAO.getListComputersSlice(conn, starter);
+
+			if (p == 0) {
+				starter = 0;
+			} else {
+				starter = p * 10;
+			}
 			
-		}
-		Integer tailleTable = implDAO.getSizeComputers(conn);
+			rs = implDAO.getListComputersSlice(conn, starter, s, clause);
+			tailleTable = implDAO.getSizeComputers(conn, clause);
 
 		List<Computer> computers = implServ.ResultSetToComputers(rs);
 
@@ -69,10 +79,10 @@ public class TableauComputerServlet extends HttpServlet {
 		Integer nbEnd = 10;
 
 		request.setAttribute("computers", computers);
-		request.setAttribute("nbStart", nbStart);
-		request.setAttribute("nbEnd", nbEnd);
 		request.setAttribute("tailleTable", tailleTable);
 		request.setAttribute("p", p);
+		request.setAttribute("s", s);
+		request.setAttribute("f", f);
 		request.setAttribute("starter", starter);
 
 		getServletContext().getRequestDispatcher("/TableauComputer.jsp")
@@ -85,46 +95,7 @@ public class TableauComputerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		GestionConnection gesCo = GestionConnection.getGestionConnection();
-		ImplementationDAO implDAO = ImplementationDAO.getInstance();
-		ImplementationService implServ = ImplementationService
-				.getImplementationService();
-
-		Integer p;
-		if (request.getParameter("p") == null) {
-			p = 1;
-		} else {
-			p = Integer.parseInt(request.getParameter("p"));
-		}
-
-		Connection conn;
-		conn = gesCo.setConnection();
-		ResultSet rs;
-		Integer starter;
-		if (p == 1) {
-			rs = implDAO.getListComputersSlice(conn, 1);
-			starter = 1;
-		} else {
-			rs = implDAO.getListComputersSlice(conn, p);
-			starter = p * 10 + 1;
-		}
-		Integer tailleTable = implDAO.getSizeComputers(conn);
-
-		List<Computer> computers = implServ.ResultSetToComputers(rs);
-
-		Integer nbStart = 1;
-		Integer nbEnd = 10;
-
-		request.setAttribute("computers", computers);
-		request.setAttribute("nbStart", nbStart);
-		request.setAttribute("nbEnd", nbEnd);
-		request.setAttribute("tailleTable", tailleTable);
-		request.setAttribute("p", p);
-		request.setAttribute("starter", starter);
-
-		getServletContext().getRequestDispatcher("/TableauComputer.jsp")
-				.forward(request, response);
-
+		doGet(request, response);
 	}
 
 }

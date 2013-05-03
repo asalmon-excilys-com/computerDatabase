@@ -24,8 +24,9 @@ public class Company {
 	}
 	
 	// TODO Réfléchir sur les constructeurs et leur utilisation
-	public Company(String name) {
+	public Company(Integer id, String name) {
 		super();
+		this.id = id;
 		this.name = name;
 	}
 	

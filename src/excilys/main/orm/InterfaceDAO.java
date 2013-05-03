@@ -9,6 +9,8 @@ public interface InterfaceDAO {
 	
 	public Integer getSizeComputers(Connection conn);
 
-	ResultSet getListComputersSlice(Connection conn, Integer starter);
+	public ResultSet getListComputersSlice(Connection conn, Integer starter, Integer s);
+	public ResultSet getListCompanies(Connection conn);
 
+	ResultSet getComputerByID(Connection conn, Integer ID);
 }
