@@ -99,7 +99,6 @@ public class Computer {
 		this.id = id;
 	}
 
-	// TODO Réfléchir sur les constructeurs et leur utilisation
 	public Computer(String name, Calendar introduced, Calendar discontinued,
 			Integer company_id, String name_company) {
 		super();
@@ -144,7 +143,6 @@ public class Computer {
 			try {
 				cal.setTime(formatter.parse(string));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return cal;

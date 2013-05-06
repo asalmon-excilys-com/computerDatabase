@@ -1,9 +1,14 @@
 package excilys.main.service;
 
-import excilys.main.orm.ImplementationDAO;
+import javax.servlet.http.HttpServletRequest;
+
+import excilys.main.pojo.Page;
+
 
 public interface InterfaceService {
 	
-
+	public Page ConstructionTableauAccueil(HttpServletRequest request);
+	public void DeleteComputer(HttpServletRequest request);
+	public Page ModifyOrAddComputer(HttpServletRequest request);
 
 }

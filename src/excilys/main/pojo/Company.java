@@ -23,7 +23,6 @@ public class Company {
 		return id;
 	}
 	
-	// TODO Réfléchir sur les constructeurs et leur utilisation
 	public Company(Integer id, String name) {
 		super();
 		this.id = id;
