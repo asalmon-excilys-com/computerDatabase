@@ -41,7 +41,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 
 	@Override
 	public List<Computer> getListComputersSlice(Integer starter, Integer s,
-			String clause) {
+			String clause) throws SQLException {
 
 		PreparedStatement ps = null;
 		List<Computer> computers = new ArrayList<Computer>();
@@ -61,14 +61,15 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		} catch (SQLException e) {
 			logger.error("Erreur de recuperation de la liste des computers"
 					+ e.getMessage());
-			return null;
+			throw e;
 		} finally {
 			if (ps != null) {
 				try {
 					ps.close();
-				} catch (SQLException e) {
+				} catch (SQLException e1) {
 					logger.error("Erreur de fermeture du statement"
-							+ e.getMessage());
+							+ e1.getMessage());
+					throw e1;
 				}
 			}
 		}
@@ -77,7 +78,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
-	public Computer getComputerByID(Integer ID) {
+	public Computer getComputerByID(Integer ID) throws SQLException {
 		Computer computer = null;
 		Statement stmt = null;
 		StringBuilder sb = new StringBuilder(SELECT_ONE_COMPUTER_BY_ID).append(
@@ -90,15 +91,16 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		} catch (SQLException e) {
 			logger.error("Erreur de recuperation du computer par ID"
 					+ e.getMessage());
-			return null;
+			throw e;
 		} finally {
 
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException e) {
+				} catch (SQLException e1) {
 					logger.error("Erreur de fermeture du statement"
-							+ e.getMessage());
+							+ e1.getMessage());
+					throw e1;
 				}
 			}
 		}
@@ -107,7 +109,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
-	public Integer getSizeComputers(String clause) {
+	public Integer getSizeComputers(String clause) throws SQLException {
 		ResultSet results = null;
 		PreparedStatement ps = null;
 
@@ -127,6 +129,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		} catch (SQLException e) {
 			logger.error("Erreur de recuperation de la taille de la table des computers"
 					+ e.getMessage());
+			throw e;
 		} finally {
 			if (ps != null) {
 				try {
@@ -134,6 +137,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 				} catch (SQLException e) {
 					logger.error("Erreur de fermeture du statement"
 							+ e.getMessage());
+					throw e;
 				}
 			}
 		}
@@ -182,6 +186,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 				} catch (SQLException e) {
 					logger.error("Erreur de fermeture du statement"
 							+ e.getMessage());
+					throw e;
 				}
 			}
 		}
@@ -209,6 +214,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 				} catch (SQLException e) {
 					logger.error("Erreur de fermeture du statement"
 							+ e.getMessage());
+					throw e;
 				}
 			}
 		}

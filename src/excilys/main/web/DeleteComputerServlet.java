@@ -1,6 +1,7 @@
 package excilys.main.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,9 +42,16 @@ public class DeleteComputerServlet extends HttpServlet {
 
 		ImplementationService implServ = ImplementationService
 				.getImplementationService();
-		implServ.DeleteComputer(request);
+		try {
+			implServ.DeleteComputer(request);
+			response.sendRedirect("TableauComputerServlet");
+		} catch (SQLException e) {
+			request.setAttribute("error", "Erreur technique");
+			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(
+					request, response);
+		}
 
-		response.sendRedirect("TableauComputerServlet");
+
 	}
 
 }

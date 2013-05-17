@@ -32,7 +32,7 @@ public class ImplementationCompanyDAO implements InterfaceCompanyDAO {
 	}
 
 	@Override
-	public List<Company> getListCompanies() {
+	public List<Company> getListCompanies() throws SQLException {
 		List<Company> companies = new ArrayList<Company>();
 		
 		Statement stmt = null;
@@ -43,7 +43,7 @@ public class ImplementationCompanyDAO implements InterfaceCompanyDAO {
 		} catch (SQLException e) {
 			logger.error("Erreur de recuperation de la liste des compagnies"
 					+ e.getMessage());
-			return null;
+			throw e;
 		}finally{
 			if(stmt!=null){
 				try {
@@ -51,6 +51,7 @@ public class ImplementationCompanyDAO implements InterfaceCompanyDAO {
 				} catch (SQLException e) {
 					logger.error("Erreur de fermeture du statement"
 							+ e.getMessage());
+					throw e;
 				}
 			}
 		}

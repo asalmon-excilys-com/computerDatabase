@@ -1,6 +1,7 @@
 package excilys.main.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,14 +42,21 @@ public class SaveComputerServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		ImplementationService implServ = ImplementationService
 				.getImplementationService();
-		boolean error = implServ.SaveComputer(request);
-
-		if(error) {
-			getServletContext().getRequestDispatcher("/ModifyOrAdd").forward(
+		boolean error;
+		try {
+			error = implServ.SaveComputer(request);
+			if (error) {
+				getServletContext().getRequestDispatcher("/ModifyOrAdd")
+						.forward(request, response);
+			} else {
+				response.sendRedirect("TableauComputerServlet");
+			}
+		} catch (SQLException e) {
+			request.setAttribute("error", "Erreur technique");
+			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(
 					request, response);
-		}else{
-		response.sendRedirect("TableauComputerServlet");
 		}
+
 	}
 
 }

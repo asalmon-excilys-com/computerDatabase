@@ -1,6 +1,7 @@
 package excilys.main.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,11 +43,17 @@ public class TableauComputerServlet extends HttpServlet {
 		ImplementationService implServ = ImplementationService
 				.getImplementationService();
 
-		request.setAttribute("page",
-				implServ.ConstructionTableauAccueil(request));
+		try {
+			request.setAttribute("page",
+					implServ.ConstructionTableauAccueil(request));
 
-		getServletContext().getRequestDispatcher("/TableauComputer.jsp")
-				.forward(request, response);
+			getServletContext().getRequestDispatcher("/TableauComputer.jsp")
+					.forward(request, response);
+		} catch (SQLException e) {
+			request.setAttribute("error", "Erreur technique");
+			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(request, response);
+		}
+
 	}
 
 }

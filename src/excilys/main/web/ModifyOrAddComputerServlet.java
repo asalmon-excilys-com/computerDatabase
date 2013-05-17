@@ -1,6 +1,7 @@
 package excilys.main.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,11 +45,19 @@ public class ModifyOrAddComputerServlet extends HttpServlet {
 		ImplementationService implServ = ImplementationService
 				.getImplementationService();
 
-		Page page = implServ.ModifyOrAddComputer(request);
+		Page page;
+		try {
+			page = implServ.ModifyOrAddComputer(request);
+			request.setAttribute("page", page);
+			getServletContext().getRequestDispatcher(page.getUrl()).forward(
+					request, response);
+		} catch (SQLException e) {
+			request.setAttribute("error", "Erreur technique");
+			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(
+					request, response);
+		}
 
-		request.setAttribute("page", page);
-		getServletContext().getRequestDispatcher(page.getUrl()).forward(
-				request, response);
+
 	}
 
 }

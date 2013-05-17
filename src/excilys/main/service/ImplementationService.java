@@ -39,7 +39,7 @@ public class ImplementationService implements InterfaceService {
 	// Méthodes
 
 	@Override
-	public Page ConstructionTableauAccueil(HttpServletRequest request) {
+	public Page ConstructionTableauAccueil(HttpServletRequest request) throws SQLException {
 
 		Page page = new Page();
 
@@ -61,7 +61,7 @@ public class ImplementationService implements InterfaceService {
 	}
 
 	@Override
-	public void DeleteComputer(HttpServletRequest request) {
+	public void DeleteComputer(HttpServletRequest request) throws SQLException{
 
 		ImplementationComputerDAO implDAO = ImplementationComputerDAO
 				.getInstance();
@@ -75,7 +75,9 @@ public class ImplementationService implements InterfaceService {
 				GestionConnection.getInstance().getConnection().rollback();
 			} catch (SQLException e1) {
 				logger.error("Erreur de rollback" + e1.getMessage());
+				throw e1;
 			}
+			throw e;
 		} finally {
 			GestionConnection.getInstance().closeConnection();
 		}
@@ -83,7 +85,7 @@ public class ImplementationService implements InterfaceService {
 	}
 
 	@Override
-	public Page ModifyOrAddComputer(HttpServletRequest request) {
+	public Page ModifyOrAddComputer(HttpServletRequest request) throws SQLException{
 
 		ImplementationComputerDAO implDAO = ImplementationComputerDAO
 				.getInstance();
@@ -105,7 +107,7 @@ public class ImplementationService implements InterfaceService {
 		return page;
 	}
 
-	public boolean SaveComputer(HttpServletRequest request) {
+	public boolean SaveComputer(HttpServletRequest request) throws SQLException{
 
 		boolean error = false;
 		String name = null;
@@ -182,7 +184,9 @@ public class ImplementationService implements InterfaceService {
 					GestionConnection.getInstance().getConnection().rollback();
 				} catch (SQLException e1) {
 					logger.error("Erreur de rollback" + e1.getMessage());
+					throw e;
 				}
+				throw e;
 			} finally {
 				GestionConnection.getInstance().closeConnection();
 			}
