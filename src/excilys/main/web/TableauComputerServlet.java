@@ -21,7 +21,6 @@ public class TableauComputerServlet extends HttpServlet {
 	 * Default constructor.
 	 */
 	public TableauComputerServlet() {
-		super();
 	}
 
 	/**

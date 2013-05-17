@@ -4,46 +4,71 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GestionConnection {
 
+	public static final String URL = "jdbc:mysql://localhost:3306/computerDatabase";
+	public static final String USER = "root";
+	public static final String PASSWORD = "root";
+
+	final static Logger logger = LoggerFactory
+			.getLogger(GestionConnection.class);
+
 	private GestionConnection() {
+		this.threadConnection = new ThreadLocal<Connection>();
 	}
 
 	private static GestionConnection INSTANCE = null;
 
-	public static GestionConnection getGestionConnection() {
+	public ThreadLocal<Connection> threadConnection;
+
+	static {
 		if (INSTANCE == null) {
-			INSTANCE = new GestionConnection();
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				INSTANCE = new GestionConnection();
+			} catch (ClassNotFoundException e) {
+				logger.error("Impossible de charger le driver MySQL"
+						+ e.getMessage());
+				System.exit(1);
+			}
 		}
+	}
+
+	public static GestionConnection getInstance() {
 		return INSTANCE;
 	}
 
-	public Connection setConnection() {
-		Connection conn = null;
+	public Connection getConnection() {
 
-		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			String url = "jdbc:mysql://localhost:3306/computerDatabase";
-			conn = DriverManager.getConnection(url, "root", "root");
-
-		} catch (InstantiationException | IllegalAccessException
-				| ClassNotFoundException | SQLException e) {
-			System.out.println("Problèmes rencontrés GestionConnection.setConnection: " + e);
+		if (threadConnection.get() == null) {
+			try {
+				Connection conn = DriverManager.getConnection(URL, USER,
+						PASSWORD);
+				conn.setAutoCommit(false);
+				threadConnection.set(conn);
+			} catch (SQLException e) {
+				logger.error("Erreur de recuperation de la connexion"
+						+ e.getMessage());
+				return null;
+			}
 		}
-
-		return conn;
+		return threadConnection.get();
 
 	}
 
-	public static void closeConnection(Connection conn) {
+	public void closeConnection() {
 
 		try {
-			conn.close();
+			if (threadConnection.get() != null) {
+				threadConnection.get().close();
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Problèmes rencontrés: " + e);
+			logger.error("Erreur lors de la fermeture de la connexion"
+					+ e.getMessage());
 		}
-
+		threadConnection.remove();
 	}
-
 }

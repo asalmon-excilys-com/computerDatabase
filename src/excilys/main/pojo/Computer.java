@@ -2,7 +2,6 @@ package excilys.main.pojo;
 
 import java.sql.Date;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -101,7 +100,6 @@ public class Computer {
 
 	public Computer(String name, Calendar introduced, Calendar discontinued,
 			Integer company_id, String name_company) {
-		super();
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
@@ -110,7 +108,6 @@ public class Computer {
 
 	public Computer(Integer id, String name, Calendar introduced,
 			Calendar discontinued, Integer company_id, String name_company) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -118,39 +115,22 @@ public class Computer {
 		this.company = new Company(company_id, name_company);
 	}
 
-	public Computer(String id, String name, String introduced,
-			String discontinued, String company_id) {
+	public Computer(String id, String name, Calendar introduced,
+			Calendar discontinued, String company_id) {
 		
-		this(StringToInteger(id), name, StringToCalendar(introduced),
-				StringToCalendar(discontinued), StringToInteger(company_id),
+		this(StringToInteger(id), name, introduced,
+				discontinued, StringToInteger(company_id),
 				"");
 		
 	}
 	
-	public Computer(String name, String introduced,
-			String discontinued, String company_id) {
+	public Computer(String name, Calendar introduced,
+			Calendar discontinued, String company_id) {
 		
-		this(name, StringToCalendar(introduced),
-				StringToCalendar(discontinued), StringToInteger(company_id),
+		this(name, introduced,
+				discontinued, StringToInteger(company_id),
 				"");
 		
-	}
-
-	private static Calendar StringToCalendar(String string) {
-		if (string != "") {
-			Calendar cal = Calendar.getInstance();
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				cal.setTime(formatter.parse(string));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			return cal;
-
-		} else {
-			return null;
-		}
-
 	}
 
 	private static Integer StringToInteger(String string) {
@@ -164,7 +144,6 @@ public class Computer {
 	}
 
 	public Computer() {
-		super();
 	}
 
 }

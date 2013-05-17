@@ -10,5 +10,5 @@ public interface InterfaceService {
 	public Page ConstructionTableauAccueil(HttpServletRequest request);
 	public void DeleteComputer(HttpServletRequest request);
 	public Page ModifyOrAddComputer(HttpServletRequest request);
-
+	public boolean SaveComputer(HttpServletRequest request);
 }
