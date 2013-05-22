@@ -11,10 +11,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import excilys.main.pojo.Computer;
 import excilys.main.service.Useful;
 
+@Repository
+@Scope("singleton")
+@Transactional
 public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	private static final String DELETE_COMPUTER = "DELETE FROM `computerDatabase`.`computer` WHERE id = ?;";
 	private static final String INSERT_COMPUTER = "INSERT INTO `computerDatabase`.`computer` (`name`, `introduced`, `discontinued`, `company_id`) VALUES (?, ?, ?, ?);";
@@ -27,19 +34,28 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	final static Logger logger = LoggerFactory
 			.getLogger(ImplementationComputerDAO.class);
 
-	private ImplementationComputerDAO() {
-	}
-
-	private static ImplementationComputerDAO INSTANCE = null;
-
-	public static ImplementationComputerDAO getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ImplementationComputerDAO();
-		}
-		return INSTANCE;
-	}
+//	@Autowired
+//	private ImplementationComputerDAO() {
+//		if (INSTANCE == null) {
+//			INSTANCE = new ImplementationComputerDAO();
+//		}
+//	}
+//	@Autowired
+//	private static ImplementationComputerDAO INSTANCE = null;
+//
+////	@Autowired
+////	public static ImplementationComputerDAO getInstance() {
+////		if (INSTANCE == null) {
+////			INSTANCE = new ImplementationComputerDAO();
+////		}
+////		return INSTANCE;
+////	}
+//	
+	@Autowired
+	GestionConnection gesco;
 
 	@Override
+	@Transactional
 	public List<Computer> getListComputersSlice(Integer starter, Integer s,
 			String clause) throws SQLException {
 
@@ -52,7 +68,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 				.append(order).append(LIMIT_SELECT);
 
 		try {
-			ps = GestionConnection.getInstance().getConnection()
+			ps = gesco.getConnection()
 					.prepareStatement(sb.toString());
 			ps.setString(1, clause);
 			ps.setInt(2, starter);
@@ -78,6 +94,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
+	@Transactional
 	public Computer getComputerByID(Integer ID) throws SQLException {
 		Computer computer = null;
 		Statement stmt = null;
@@ -85,7 +102,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 				ID).append(";");
 
 		try {
-			stmt = GestionConnection.getInstance().getConnection()
+			stmt = gesco.getConnection()
 					.createStatement();
 			computer = Useful.ResultSetToComputer(stmt.executeQuery(sb.toString()));
 		} catch (SQLException e) {
@@ -109,6 +126,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
+	@Transactional
 	public Integer getSizeComputers(String clause) throws SQLException {
 		ResultSet results = null;
 		PreparedStatement ps = null;
@@ -117,9 +135,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		String sql = COUNT_COMPUTERS;
 
 		try {
-
-			ps = GestionConnection.getInstance().getConnection()
-					.prepareStatement(sql);
+			ps = gesco.getConnection().prepareStatement(sql);
 			ps.setString(1, clause);
 			results = ps.executeQuery();
 			while (results.next()) {
@@ -147,6 +163,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
+	@Transactional
 	public void saveComputer(Computer cp, boolean newCp) throws SQLException{
 
 		PreparedStatement ps = null;
@@ -159,7 +176,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		}
 
 		try {
-			ps = GestionConnection.getInstance().getConnection()
+			ps = gesco.getConnection()
 					.prepareStatement(sql);
 			Date introducedSQL = Useful.gestionNull(cp.getIntroduced());
 			Date discontinuedSQL = Useful.gestionNull(cp.getDiscontinued());
@@ -193,6 +210,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
+	@Transactional
 	public void deleteComputerByID(Integer id) throws SQLException {
 
 		PreparedStatement ps = null;
@@ -200,7 +218,7 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		String sql = DELETE_COMPUTER;
 
 		try {
-			ps = GestionConnection.getInstance().getConnection()
+			ps = gesco.getConnection()
 					.prepareStatement(sql);
 
 			ps.setInt(1, id);
@@ -219,4 +237,5 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 			}
 		}
 	}
+
 }

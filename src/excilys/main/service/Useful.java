@@ -9,41 +9,54 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import excilys.main.pojo.Company;
 import excilys.main.pojo.Computer;
 
+@Component
 public class Useful {
+
 	final static Logger logger = LoggerFactory
 			.getLogger(Useful.class);
 
 	public static String gestionTri(Integer s) {
-		String order = "c.name ASC";
-		switch (s) {
-		case -2:
-			order = "c.name DESC";
-			break;
-		case -3:
-			order = "c.introduced DESC";
-			break;
-		case 3:
-			order = "c.introduced ASC";
-			break;
-		case -4:
-			order = "c.discontinued DESC";
-			break;
-		case 4:
-			order = "c.discontinued ASC";
-			break;
-		case -5:
-			order = "cie.name DESC";
-			break;
-		case 5:
-			order = "cie.name ASC";
-			break;
+		 String[] type = {"c.name","c.name","c.name", "c.introduced", "c.discontinued", "cie.name"};
+		String[] sens = {"ASC", "DESC"};
+		
+		StringBuilder sb = new StringBuilder();
+		if(s<0){
+			sb.append(type[-s]).append(" ").append(sens[1]);
+		}else{
+			sb.append(type[s]).append(" ").append(sens[0]);
 		}
+//		String order = "c.name ASC";
+//		
+//		switch (s) {
+//		case -2:
+//			order = "c.name DESC";
+//			break;
+//		case -3:
+//			order = "c.introduced DESC";
+//			break;
+//		case 3:
+//			order = "c.introduced ASC";
+//			break;
+//		case -4:
+//			order = "c.discontinued DESC";
+//			break;
+//		case 4:
+//			order = "c.discontinued ASC";
+//			break;
+//		case -5:
+//			order = "cie.name DESC";
+//			break;
+//		case 5:
+//			order = "cie.name ASC";
+//			break;
+//		}
 
-		return order;
+		return sb.toString();
 	}
 
 	public static Date gestionNull(Calendar cal) {

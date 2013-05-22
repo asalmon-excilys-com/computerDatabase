@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import excilys.main.service.ImplementationService;
 
 /**
@@ -40,8 +43,9 @@ public class SaveComputerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		ImplementationService implServ = ImplementationService
-				.getImplementationService();
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
+		
+		ImplementationService implServ = (ImplementationService) context.getBean(ImplementationService.class);
 		boolean error;
 		try {
 			error = implServ.SaveComputer(request);

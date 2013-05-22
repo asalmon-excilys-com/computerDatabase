@@ -10,32 +10,46 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import excilys.main.orm.GestionConnection;
-import excilys.main.orm.ImplementationCompanyDAO;
 import excilys.main.orm.ImplementationComputerDAO;
 import excilys.main.orm.InterfaceCompanyDAO;
 import excilys.main.pojo.Computer;
 import excilys.main.pojo.Page;
 
+@Service
+@Scope("singleton")
 public class ImplementationService implements InterfaceService {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ImplementationService.class);
 
-	// Singleton
-	private ImplementationService() {
-	}
+//	// Singleton
+//	private ImplementationService() {
+//	}
+//
+//	@Autowired
+//	private static ImplementationService INSTANCE = null;
+//
+//	public static ImplementationService getImplementationService() {
+//		if (INSTANCE == null) {
+//			INSTANCE = new ImplementationService();
+//		}
+//		return INSTANCE;
+//	}
 
-	private static ImplementationService INSTANCE = null;
-
-	public static ImplementationService getImplementationService() {
-		if (INSTANCE == null) {
-			INSTANCE = new ImplementationService();
-		}
-		return INSTANCE;
-	}
-
+	@Autowired
+	ImplementationComputerDAO implDAO;
+	
+	@Autowired
+	InterfaceCompanyDAO DAOcompany;
+	
+	@Autowired
+	GestionConnection gesco;
+	
 	// Méthodes
 
 	@Override
@@ -43,8 +57,6 @@ public class ImplementationService implements InterfaceService {
 
 		Page page = new Page();
 
-		ImplementationComputerDAO implDAO = ImplementationComputerDAO
-				.getInstance();
 		page.setS(Useful.gestionNull(request.getParameter("s")));
 		page.setP(Useful.gestionNull(request.getParameter("p")));
 		page.setStarter(Useful.gestionStarter(page.getP()));
@@ -55,7 +67,7 @@ public class ImplementationService implements InterfaceService {
 		page.setComputers(implDAO.getListComputersSlice(page.getStarter(),
 				page.getS(), "%" + page.getF() + "%"));
 
-		GestionConnection.getInstance().closeConnection();
+		gesco.closeConnection();
 
 		return page;
 	}
@@ -63,8 +75,7 @@ public class ImplementationService implements InterfaceService {
 	@Override
 	public void DeleteComputer(HttpServletRequest request) throws SQLException{
 
-		ImplementationComputerDAO implDAO = ImplementationComputerDAO
-				.getInstance();
+//		implDAO.getInstance();
 
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		try {
@@ -72,14 +83,14 @@ public class ImplementationService implements InterfaceService {
 		} catch (SQLException e) {
 			logger.error("Erreur de suppresion d'un computer" + e.getMessage());
 			try {
-				GestionConnection.getInstance().getConnection().rollback();
+				gesco.getConnection().rollback();
 			} catch (SQLException e1) {
 				logger.error("Erreur de rollback" + e1.getMessage());
 				throw e1;
 			}
 			throw e;
 		} finally {
-			GestionConnection.getInstance().closeConnection();
+			gesco.closeConnection();
 		}
 
 	}
@@ -87,9 +98,8 @@ public class ImplementationService implements InterfaceService {
 	@Override
 	public Page ModifyOrAddComputer(HttpServletRequest request) throws SQLException{
 
-		ImplementationComputerDAO implDAO = ImplementationComputerDAO
-				.getInstance();
-		InterfaceCompanyDAO DAOcompany = ImplementationCompanyDAO.getInstance();
+//		implDAO.getInstance();
+//		DAOcompany.getInstance();
 
 		Page page = new Page();
 
@@ -103,7 +113,7 @@ public class ImplementationService implements InterfaceService {
 			page.setUrl("/Computer.jsp");
 		}
 
-		GestionConnection.getInstance().closeConnection();
+		gesco.closeConnection();
 		return page;
 	}
 
@@ -156,8 +166,7 @@ public class ImplementationService implements InterfaceService {
 			}
 		}
 
-		ImplementationComputerDAO implDAO = ImplementationComputerDAO
-				.getInstance();
+//		implDAO.getInstance();
 
 		if (!error) {
 			Computer cp;
@@ -181,14 +190,14 @@ public class ImplementationService implements InterfaceService {
 				logger.error("Erreur de sauvegarde des ordinateurs"
 						+ e.getMessage());
 				try {
-					GestionConnection.getInstance().getConnection().rollback();
+					gesco.getConnection().rollback();
 				} catch (SQLException e1) {
 					logger.error("Erreur de rollback" + e1.getMessage());
 					throw e;
 				}
 				throw e;
 			} finally {
-				GestionConnection.getInstance().closeConnection();
+				gesco.closeConnection();
 			}
 
 		}
