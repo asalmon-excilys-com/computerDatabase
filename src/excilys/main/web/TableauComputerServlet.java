@@ -46,11 +46,8 @@ public class TableauComputerServlet extends HttpServlet {
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
 		
-		ImplementationService implServ = (ImplementationService) context.getBean(ImplementationService.class);
+		ImplementationService implServ = (ImplementationService) context.getBean(excilys.main.service.ImplementationService.class);
 		
-//		ImplementationService implServ = ImplementationService
-//				.getImplementationService();
-
 		try {
 			request.setAttribute("page",
 					implServ.ConstructionTableauAccueil(request));

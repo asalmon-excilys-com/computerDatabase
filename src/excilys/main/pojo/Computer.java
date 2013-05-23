@@ -11,13 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name="computer")
+@Entity
+@Table(name="computer")
 public class Computer {
 	
-	//TODO IOC: autowiring par annotations
-//	@Id
-//	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String name;
 	private Calendar introduced;
@@ -28,7 +27,6 @@ public class Computer {
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -36,16 +34,13 @@ public class Computer {
 	public Calendar getIntroduced() {
 		return introduced;
 	}
-
 	public String getIntroducedToString() {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		return formatter.format(this.introduced.getTime());
 	}
-
 	public void setIntroduced(Calendar introduced) {
 		this.introduced = introduced;
 	}
-
 	public void setIntroduced(Date introduced) {
 		if (introduced != null) {
 			Calendar cal = dateToCalendar(introduced);
@@ -58,16 +53,13 @@ public class Computer {
 	public Calendar getDiscontinued() {
 		return discontinued;
 	}
-
 	public String getDiscontinuedToString() {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		return formatter.format(this.discontinued.getTime());
 	}
-
 	public void setDiscontinued(Calendar discontinued) {
 		this.discontinued = discontinued;
 	}
-
 	public void setDiscontinued(Date discontinued) {
 		if (discontinued != null) {
 			Calendar cal = dateToCalendar(discontinued);
@@ -81,22 +73,12 @@ public class Computer {
 	private Calendar dateToCalendar(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-
 		return cal;
 	}
-
-	// public Integer getCompany_id() {
-	// return company_id;
-	// }
-	//
-	// public void setCompany_id(Integer company_id) {
-	// this.company_id = company_id;
-	// }
 
 	public Company getCompany() {
 		return company;
 	}
-
 	public void setCompany(Integer company_id, String name) {
 		this.company = new Company(company_id, name);
 	}
@@ -104,21 +86,18 @@ public class Computer {
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Computer(String name, Calendar introduced, Calendar discontinued,
-			Integer company_id, String name_company) {
+	public Computer(String name, Calendar introduced, Calendar discontinued, Integer company_id, String name_company) {
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company = new Company(company_id, name_company);
 	}
 
-	public Computer(Integer id, String name, Calendar introduced,
-			Calendar discontinued, Integer company_id, String name_company) {
+	public Computer(Integer id, String name, Calendar introduced,Calendar discontinued, Integer company_id, String name_company) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -126,8 +105,7 @@ public class Computer {
 		this.company = new Company(company_id, name_company);
 	}
 
-	public Computer(String id, String name, Calendar introduced,
-			Calendar discontinued, String company_id) {
+	public Computer(String id, String name, Calendar introduced,Calendar discontinued, String company_id) {
 		
 		this(StringToInteger(id), name, introduced,
 				discontinued, StringToInteger(company_id),
@@ -135,8 +113,7 @@ public class Computer {
 		
 	}
 	
-	public Computer(String name, Calendar introduced,
-			Calendar discontinued, String company_id) {
+	public Computer(String name, Calendar introduced,Calendar discontinued, String company_id) {
 		
 		this(name, introduced,
 				discontinued, StringToInteger(company_id),
@@ -156,5 +133,36 @@ public class Computer {
 
 	public Computer() {
 	}
+	
+	public Computer(String name, Date introduced, Date discontinued, Integer company_id, String name_company) {
+		this.name = name;
+		this.introduced = dateToCalendar(introduced);
+		this.discontinued = dateToCalendar(discontinued);
+		this.company = new Company(company_id, name_company);
+	}
+
+	public Computer(Integer id, String name, Date introduced,Date discontinued, Integer company_id, String name_company) {
+		this.id = id;
+		this.name = name;
+		this.introduced = dateToCalendar(introduced);
+		this.discontinued = dateToCalendar(discontinued);
+		this.company = new Company(company_id, name_company);
+	}
+
+	public Computer(String id, String name, Date introduced,Date discontinued, String company_id) {
+		
+		this(StringToInteger(id), name, introduced,
+				discontinued, StringToInteger(company_id),
+				"");
+		
+	}
+	
+	public Computer(String name, Date introduced,Date discontinued, String company_id) {
+		this(name, introduced,
+				discontinued, StringToInteger(company_id),
+				"");
+		
+	}
+
 
 }

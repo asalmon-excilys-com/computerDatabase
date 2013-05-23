@@ -1,61 +1,33 @@
 package excilys.main.service;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import excilys.main.pojo.Company;
 import excilys.main.pojo.Computer;
 
 @Component
 public class Useful {
 
-	final static Logger logger = LoggerFactory
-			.getLogger(Useful.class);
+	final static Logger logger = LoggerFactory.getLogger(Useful.class);
 
 	public static String gestionTri(Integer s) {
-		 String[] type = {"c.name","c.name","c.name", "c.introduced", "c.discontinued", "cie.name"};
-		String[] sens = {"ASC", "DESC"};
-		
+		String[] type = { "c.name", "c.name", "c.name", "c.introduced",
+				"c.discontinued", "cie.name" };
+		String[] sens = { "ASC", "DESC" };
+
 		StringBuilder sb = new StringBuilder();
-		if(s<0){
+		if (s < 0) {
 			sb.append(type[-s]).append(" ").append(sens[1]);
-		}else{
+		} else {
 			sb.append(type[s]).append(" ").append(sens[0]);
 		}
-//		String order = "c.name ASC";
-//		
-//		switch (s) {
-//		case -2:
-//			order = "c.name DESC";
-//			break;
-//		case -3:
-//			order = "c.introduced DESC";
-//			break;
-//		case 3:
-//			order = "c.introduced ASC";
-//			break;
-//		case -4:
-//			order = "c.discontinued DESC";
-//			break;
-//		case 4:
-//			order = "c.discontinued ASC";
-//			break;
-//		case -5:
-//			order = "cie.name DESC";
-//			break;
-//		case 5:
-//			order = "cie.name ASC";
-//			break;
-//		}
-
 		return sb.toString();
 	}
 
@@ -101,66 +73,35 @@ public class Useful {
 		}
 	}
 
-	public static List<Computer> ResultSetToComputers(ResultSet rs) {
+	public static List<Computer> ResultSetToComputers(
+			List<Map<String, Object>> rows) {
 
 		List<Computer> computers = new ArrayList<Computer>();
 
-		try {
-			while (rs.next()) {
-				Computer cp = new Computer();
-				cp.setId(rs.getInt(1));
-				cp.setName(rs.getString(4));
-				cp.setIntroduced(rs.getDate(2));
-				cp.setDiscontinued(rs.getDate(3));
-				cp.setCompany(rs.getInt(5), rs.getString(6));
-				computers.add(cp);
-			}
-
-		} catch (SQLException e) {
-			logger.error("Erreur de conversion liste ordinateurs"
-					+ e.getMessage());
-		}
-		return computers;
-
-	}
-
-	public static Computer ResultSetToComputer(ResultSet rs) {
-
+		for (Map<String, Object> row : rows) {
 			Computer cp = new Computer();
 
-			try {
-				while(rs.next()){
-				rs.first();
-				cp.setId(rs.getInt(1));
-				cp.setName(rs.getString(4));
-				cp.setIntroduced(rs.getDate(2));
-				cp.setDiscontinued(rs.getDate(3));
-				cp.setCompany(rs.getInt(5), rs.getString(6));
-				}
-
-			} catch (SQLException e) {
-				logger.error("Erreur de conversion ordinateur"
-						+ e.getMessage());
-			}
-			return cp;
+			cp.setId((Integer) row.get("id"));
+			cp.setName((String) row.get("name"));
+			cp.setIntroduced((Date) row.get("introduced"));
+			cp.setDiscontinued((Date) row.get("discontinued"));
+			cp.setCompany((Integer) row.get("cid"), (String) row.get("cname"));
+			computers.add(cp);
+		}
+		return computers;
 	}
 
-	public static List<Company> ResultSetToCompanies(ResultSet rs) {
+	public static Computer ResultSetToComputer(Map<String, Object> row) {
 
-		List<Company> companies = new ArrayList<Company>();
+		Computer cp = new Computer();
 
-		try {
-			while (rs.next()) {
-				Company cp = new Company(rs.getInt(1), rs.getString(2));
-				companies.add(cp);
-			}
+		cp.setId((Integer) row.get("id"));
+		cp.setName((String) row.get("name"));
+		cp.setIntroduced((Date) row.get("introduced"));
+		cp.setDiscontinued((Date) row.get("discontinued"));
+		cp.setCompany((Integer) row.get("cid"), (String) row.get("cname"));
 
-		} catch (SQLException e) {
-			logger.error("Erreur de conversion liste compagnies"
-					+ e.getMessage());
-		}
-		return companies;
-
+		return cp;
 	}
 
 }

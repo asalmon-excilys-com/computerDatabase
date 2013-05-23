@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import excilys.main.orm.GestionConnection;
 import excilys.main.orm.ImplementationComputerDAO;
 import excilys.main.orm.InterfaceCompanyDAO;
 import excilys.main.pojo.Computer;
@@ -26,31 +26,40 @@ public class ImplementationService implements InterfaceService {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ImplementationService.class);
-
-//	// Singleton
-//	private ImplementationService() {
-//	}
-//
-//	@Autowired
-//	private static ImplementationService INSTANCE = null;
-//
-//	public static ImplementationService getImplementationService() {
-//		if (INSTANCE == null) {
-//			INSTANCE = new ImplementationService();
-//		}
-//		return INSTANCE;
-//	}
-
-	@Autowired
-	ImplementationComputerDAO implDAO;
 	
 	@Autowired
 	InterfaceCompanyDAO DAOcompany;
-	
 	@Autowired
-	GestionConnection gesco;
+	ImplementationComputerDAO implDAO;
+	@Autowired
+	DataSource ds;
+
+public ImplementationService() {
+	}
 	
-	// Méthodes
+	public InterfaceCompanyDAO getDAOcompany() {
+		return DAOcompany;
+	}
+
+	public void setDAOcompany(InterfaceCompanyDAO dAOcompany) {
+		DAOcompany = dAOcompany;
+	}
+
+	public ImplementationComputerDAO getImplDAO() {
+		return implDAO;
+	}
+
+	public void setImplDAO(ImplementationComputerDAO implDAO) {
+		this.implDAO = implDAO;
+	}
+
+	public DataSource getGesco() {
+		return ds;
+	}
+
+	public void setGesco(DataSource gesco) {
+		this.ds = gesco;
+	}
 
 	@Override
 	public Page ConstructionTableauAccueil(HttpServletRequest request) throws SQLException {
@@ -66,16 +75,11 @@ public class ImplementationService implements InterfaceService {
 
 		page.setComputers(implDAO.getListComputersSlice(page.getStarter(),
 				page.getS(), "%" + page.getF() + "%"));
-
-		gesco.closeConnection();
-
 		return page;
 	}
 
 	@Override
 	public void DeleteComputer(HttpServletRequest request) throws SQLException{
-
-//		implDAO.getInstance();
 
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		try {
@@ -83,23 +87,17 @@ public class ImplementationService implements InterfaceService {
 		} catch (SQLException e) {
 			logger.error("Erreur de suppresion d'un computer" + e.getMessage());
 			try {
-				gesco.getConnection().rollback();
+				ds.getConnection().rollback();
 			} catch (SQLException e1) {
 				logger.error("Erreur de rollback" + e1.getMessage());
 				throw e1;
 			}
-			throw e;
-		} finally {
-			gesco.closeConnection();
-		}
+			throw e;}
 
 	}
 
 	@Override
 	public Page ModifyOrAddComputer(HttpServletRequest request) throws SQLException{
-
-//		implDAO.getInstance();
-//		DAOcompany.getInstance();
 
 		Page page = new Page();
 
@@ -112,8 +110,6 @@ public class ImplementationService implements InterfaceService {
 			page.setCp(implDAO.getComputerByID(id));
 			page.setUrl("/Computer.jsp");
 		}
-
-		gesco.closeConnection();
 		return page;
 	}
 
@@ -166,8 +162,6 @@ public class ImplementationService implements InterfaceService {
 			}
 		}
 
-//		implDAO.getInstance();
-
 		if (!error) {
 			Computer cp;
 
@@ -190,14 +184,12 @@ public class ImplementationService implements InterfaceService {
 				logger.error("Erreur de sauvegarde des ordinateurs"
 						+ e.getMessage());
 				try {
-					gesco.getConnection().rollback();
+					ds.getConnection().rollback();
 				} catch (SQLException e1) {
 					logger.error("Erreur de rollback" + e1.getMessage());
 					throw e;
 				}
 				throw e;
-			} finally {
-				gesco.closeConnection();
 			}
 
 		}

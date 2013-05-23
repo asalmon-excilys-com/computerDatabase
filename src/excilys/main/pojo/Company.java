@@ -14,11 +14,11 @@ import javax.persistence.Table;
  *
  */
 
-//@Entity
-//@Table(name="company")
+@Entity
+@Table(name="company")
 public class Company {
-//	@Id
-//	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String name;
 	
@@ -31,6 +31,9 @@ public class Company {
 	}
 	public Integer getId() {
 		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	public Company(Integer id, String name) {

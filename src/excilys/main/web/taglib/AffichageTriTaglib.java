@@ -43,7 +43,6 @@ public class AffichageTriTaglib extends TagSupport {
 			tabCol[3] = -5;
 			break;
 		default:
-//			s=0;
 			tabCol[0] = -2;
 			break;
 		}
