@@ -1,6 +1,5 @@
 package excilys.main.orm;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -12,11 +11,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import excilys.main.pojo.Company;
 
 @Repository
 @Scope("singleton")
+@Transactional
 public class ImplementationCompanyDAO implements InterfaceCompanyDAO {
 	
 	final static Logger logger = LoggerFactory
@@ -36,6 +37,7 @@ public class ImplementationCompanyDAO implements InterfaceCompanyDAO {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Company> getListCompanies() throws Exception {
 		 jdbc = new JdbcTemplate(ds);
 		 try{

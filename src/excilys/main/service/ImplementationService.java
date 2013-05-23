@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import excilys.main.orm.ImplementationComputerDAO;
 import excilys.main.orm.InterfaceCompanyDAO;
+import excilys.main.orm.InterfaceComputerDAO;
 import excilys.main.pojo.Computer;
 import excilys.main.pojo.Page;
 
@@ -27,9 +27,9 @@ public class ImplementationService implements InterfaceService {
 			.getLogger(ImplementationService.class);
 	
 	@Autowired
-	InterfaceCompanyDAO DAOcompany;
+	InterfaceCompanyDAO companyDAO;
 	@Autowired
-	ImplementationComputerDAO implDAO;
+	InterfaceComputerDAO computerDAO;
 	@Autowired
 	DataSource ds;
 
@@ -37,19 +37,19 @@ public ImplementationService() {
 	}
 	
 	public InterfaceCompanyDAO getDAOcompany() {
-		return DAOcompany;
+		return companyDAO;
 	}
 
 	public void setDAOcompany(InterfaceCompanyDAO dAOcompany) {
-		DAOcompany = dAOcompany;
+		companyDAO = dAOcompany;
 	}
 
-	public ImplementationComputerDAO getImplDAO() {
-		return implDAO;
+	public InterfaceComputerDAO getImplDAO() {
+		return computerDAO;
 	}
 
-	public void setImplDAO(ImplementationComputerDAO implDAO) {
-		this.implDAO = implDAO;
+	public void setImplDAO(InterfaceComputerDAO implDAO) {
+		this.computerDAO = implDAO;
 	}
 
 	public DataSource getGesco() {
@@ -70,9 +70,9 @@ public ImplementationService() {
 		page.setStarter(Useful.gestionStarter(page.getP()));
 		page.setF(Useful.gestionNullClause(request.getParameter("f")));
 
-		page.setTailleTable(implDAO.getSizeComputers("%" + page.getF() + "%"));
+		page.setTailleTable(computerDAO.getSizeComputers("%" + page.getF() + "%"));
 
-		page.setComputers(implDAO.getListComputersSlice(page.getStarter(),
+		page.setComputers(computerDAO.getListComputersSlice(page.getStarter(),
 				page.getS(), "%" + page.getF() + "%"));
 		return page;
 	}
@@ -82,7 +82,7 @@ public ImplementationService() {
 
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		try {
-			implDAO.deleteComputerByID(id);
+			computerDAO.deleteComputerByID(id);
 		} catch (Exception e) {
 			logger.error("Erreur de suppression d'un computer" + e.getMessage());
 			try {
@@ -100,13 +100,13 @@ public ImplementationService() {
 
 		Page page = new Page();
 
-		page.setCompanies(DAOcompany.getListCompanies());
+		page.setCompanies(companyDAO.getListCompanies());
 
 		if (request.getParameter("id") == null) {
 			page.setUrl("/NewComputer.jsp");
 		} else {
 			Integer id = Integer.parseInt(request.getParameter("id"));
-			page.setCp(implDAO.getComputerByID(id));
+			page.setCp(computerDAO.getComputerByID(id));
 			page.setUrl("/Computer.jsp");
 		}
 		return page;
@@ -178,16 +178,10 @@ public ImplementationService() {
 			}
 
 			try {
-				implDAO.saveComputer(cp, newCp);
+				computerDAO.saveComputer(cp, newCp);
 			} catch (Exception e) {
 				logger.error("Erreur de sauvegarde des ordinateurs"
 						+ e.getMessage());
-				try {
-					ds.getConnection().rollback();
-				} catch (Exception e1) {
-					logger.error("Erreur de rollback" + e1.getMessage());
-					throw e;
-				}
 				throw e;
 			}
 

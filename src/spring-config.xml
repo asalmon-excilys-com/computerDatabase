@@ -13,7 +13,7 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="excilys.main" />
-<!-- 	<tx:annotation-driven transaction-manager="txManager" /> -->
+	<tx:annotation-driven transaction-manager="txManager" />
 
 	<bean id="aDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -23,7 +23,8 @@
 		<property name="password" value="root" />
 	</bean>
 
-<!-- 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> -->
-<!-- 		<property name="dataSource" ref="aDataSource" /> -->
-<!-- 	</bean> -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="aDataSource" />
+	</bean>
+	
 </beans>
