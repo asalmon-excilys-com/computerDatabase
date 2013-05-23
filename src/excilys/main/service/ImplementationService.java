@@ -1,6 +1,5 @@
 package excilys.main.service;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,7 +61,7 @@ public ImplementationService() {
 	}
 
 	@Override
-	public Page ConstructionTableauAccueil(HttpServletRequest request) throws SQLException {
+	public Page ConstructionTableauAccueil(HttpServletRequest request) throws Exception {
 
 		Page page = new Page();
 
@@ -79,16 +78,16 @@ public ImplementationService() {
 	}
 
 	@Override
-	public void DeleteComputer(HttpServletRequest request) throws SQLException{
+	public void DeleteComputer(HttpServletRequest request) throws Exception{
 
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		try {
 			implDAO.deleteComputerByID(id);
-		} catch (SQLException e) {
-			logger.error("Erreur de suppresion d'un computer" + e.getMessage());
+		} catch (Exception e) {
+			logger.error("Erreur de suppression d'un computer" + e.getMessage());
 			try {
 				ds.getConnection().rollback();
-			} catch (SQLException e1) {
+			} catch (Exception e1) {
 				logger.error("Erreur de rollback" + e1.getMessage());
 				throw e1;
 			}
@@ -97,7 +96,7 @@ public ImplementationService() {
 	}
 
 	@Override
-	public Page ModifyOrAddComputer(HttpServletRequest request) throws SQLException{
+	public Page ModifyOrAddComputer(HttpServletRequest request) throws Exception{
 
 		Page page = new Page();
 
@@ -113,7 +112,7 @@ public ImplementationService() {
 		return page;
 	}
 
-	public boolean SaveComputer(HttpServletRequest request) throws SQLException{
+	public boolean SaveComputer(HttpServletRequest request) throws Exception{
 
 		boolean error = false;
 		String name = null;
@@ -180,12 +179,12 @@ public ImplementationService() {
 
 			try {
 				implDAO.saveComputer(cp, newCp);
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				logger.error("Erreur de sauvegarde des ordinateurs"
 						+ e.getMessage());
 				try {
 					ds.getConnection().rollback();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					logger.error("Erreur de rollback" + e1.getMessage());
 					throw e;
 				}

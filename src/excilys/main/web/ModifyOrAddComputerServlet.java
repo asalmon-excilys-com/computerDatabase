@@ -1,7 +1,6 @@
 package excilys.main.web;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -55,7 +54,7 @@ public class ModifyOrAddComputerServlet extends HttpServlet {
 			request.setAttribute("page", page);
 			getServletContext().getRequestDispatcher(page.getUrl()).forward(
 					request, response);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			request.setAttribute("error", "Erreur technique");
 			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(
 					request, response);

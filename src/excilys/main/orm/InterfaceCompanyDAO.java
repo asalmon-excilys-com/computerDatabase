@@ -7,6 +7,6 @@ import excilys.main.pojo.Company;
 
 public interface InterfaceCompanyDAO {
 
-	public abstract List<Company> getListCompanies() throws SQLException;
+	public abstract List<Company> getListCompanies() throws Exception;
 
 }

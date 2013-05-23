@@ -36,9 +36,16 @@ public class ImplementationCompanyDAO implements InterfaceCompanyDAO {
 	}
 
 	@Override
-	public List<Company> getListCompanies() throws SQLException {
+	public List<Company> getListCompanies() throws Exception {
 		 jdbc = new JdbcTemplate(ds);
+		 try{
 		List<Company> companies = jdbc.query(SELECT_ALL_COMPANIES, new BeanPropertyRowMapper<Company>(Company.class));
 		return companies;
+		}catch(Exception e)
+		{
+			logger.error("Erreur de fermeture du statement"
+					+ e.getMessage());
+			throw e;
+		}
 	}
 }

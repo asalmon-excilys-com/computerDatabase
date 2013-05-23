@@ -8,17 +8,17 @@ import excilys.main.pojo.Computer;
 public interface InterfaceComputerDAO {
 	// Listes
 	public List<Computer> getListComputersSlice(Integer starter,
-			Integer s, String clause) throws SQLException;
+			Integer s, String clause) throws Exception;
 
-	public Computer getComputerByID(Integer ID) throws SQLException;
+	public Computer getComputerByID(Integer ID) throws Exception;
 
 	// Size
-	public Integer getSizeComputers(String clause) throws SQLException;
+	public Integer getSizeComputers(String clause) throws Exception;
 
 	// Save
-	public void saveComputer(Computer cp, boolean newCp) throws SQLException;
+	public void saveComputer(Computer cp, boolean newCp) throws Exception;
 
 	// Delete
-	public void deleteComputerByID(Integer id) throws SQLException;
+	public void deleteComputerByID(Integer id) throws Exception;
 
 }
