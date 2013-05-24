@@ -56,10 +56,10 @@ public ImplementationService() {
 
 		Page page = new Page();
 
-		page.setS(Useful.gestionNull(request.getParameter("s")));
-		page.setP(Useful.gestionNull(request.getParameter("p")));
-		page.setStarter(Useful.gestionStarter(page.getP()));
-		page.setF(Useful.gestionNullClause(request.getParameter("f")));
+		page.setS(UtilitaireService.gestionNull(request.getParameter("s")));
+		page.setP(UtilitaireService.gestionNull(request.getParameter("p")));
+		page.setStarter(UtilitaireService.gestionStarter(page.getP()));
+		page.setF(UtilitaireService.gestionNullClause(request.getParameter("f")));
 
 		page.setTailleTable(computerDAO.getSizeComputers("%" + page.getF() + "%"));
 

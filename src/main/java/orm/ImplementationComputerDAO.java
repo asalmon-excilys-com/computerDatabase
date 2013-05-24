@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import main.java.pojo.Computer;
-import main.java.service.Useful;
 
 @Repository
 @Scope("singleton")
@@ -52,12 +51,12 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 		insert.add(starter);
 
 		StringBuilder sb = new StringBuilder(SELECT_ALL_COMPUTERS)
-				.append(Useful.gestionTri(s)).append(LIMIT_SELECT);
+				.append(UtilitaireDAO.gestionTri(s)).append(LIMIT_SELECT);
 
 		try{
 		List<Map<String, Object>> rows = jdbc.queryForList(sb.toString(),
 				insert.toArray());
-		return Useful.ResultSetToComputers(rows);
+		return UtilitaireDAO.ResultSetToComputers(rows);
 		}catch(Exception e){
 			logger.error("Erreur de recuperation de la liste des computers"
 					+ e.getMessage());
@@ -76,7 +75,7 @@ try{
 		Map<String, Object> row = jdbc.queryForMap(SELECT_ONE_COMPUTER_BY_ID,
 				insert.toArray());
 
-		return Useful.ResultSetToComputer(row);
+		return UtilitaireDAO.ResultSetToComputer(row);
 }catch(Exception e){
 	logger.error("Erreur de recuperation du computer par ID"
 			+ e.getMessage());
@@ -111,8 +110,8 @@ try{
 
 		ArrayList<Object> insert = new ArrayList<Object>();
 		insert.add(cp.getName());
-		insert.add(Useful.gestionNull(cp.getIntroduced()));
-		insert.add(Useful.gestionNull(cp.getDiscontinued()));
+		insert.add(UtilitaireDAO.gestionNull(cp.getIntroduced()));
+		insert.add(UtilitaireDAO.gestionNull(cp.getDiscontinued()));
 
 		if (cp.getCompany().getId() == null) {
 			insert.add(null);
