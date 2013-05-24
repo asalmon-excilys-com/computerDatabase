@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import excilys.main.service.ImplementationService;
+import excilys.main.service.InterfaceService;
 
 /**
  * Servlet implementation class TableauComputerServlet
  */
 @WebServlet("/TableauComputerServlet")
 public class TableauComputerServlet extends HttpServlet {
+	private ApplicationContext context = null;
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -42,20 +42,22 @@ public class TableauComputerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		if (context == null){
+			context = new ClassPathXmlApplicationContext("spring-config.xml");
+        }  if (context != null){
+        }
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
-		
-		ImplementationService implServ = (ImplementationService) context.getBean(excilys.main.service.ImplementationService.class);
+		InterfaceService implServ = context.getBean(excilys.main.service.InterfaceService.class);
 		
 		try {
 			request.setAttribute("page",
 					implServ.ConstructionTableauAccueil(request));
 
-			getServletContext().getRequestDispatcher("/TableauComputer.jsp")
+			getServletContext().getRequestDispatcher("/jsp/TableauComputer.jsp")
 					.forward(request, response);
 		} catch (Exception e) {
 			request.setAttribute("error", "Erreur technique");
-			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(request, response);
+			getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
 		}
 
 	}

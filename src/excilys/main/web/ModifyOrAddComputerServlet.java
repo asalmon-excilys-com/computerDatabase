@@ -9,16 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import excilys.main.pojo.Page;
-import excilys.main.service.ImplementationService;
+import excilys.main.service.InterfaceService;
 
 /**
  * Servlet implementation class ModifyOrAddComputerServlet
  */
 @WebServlet("/ModifyOrAdd")
 public class ModifyOrAddComputerServlet extends HttpServlet {
+	private ApplicationContext context = null;
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -44,9 +45,12 @@ public class ModifyOrAddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
-		
-		ImplementationService implServ = (ImplementationService) context.getBean(ImplementationService.class);
+		if (context == null){
+            context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+            System.out.println(context);
+        }if (context != null){
+        }
+		InterfaceService implServ = context.getBean(excilys.main.service.InterfaceService.class);
 
 		Page page;
 		try {
@@ -56,7 +60,7 @@ public class ModifyOrAddComputerServlet extends HttpServlet {
 					request, response);
 		} catch (Exception e) {
 			request.setAttribute("error", "Erreur technique");
-			getServletContext().getRequestDispatcher("/errorPage.jsp").forward(
+			getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(
 					request, response);
 		}
 

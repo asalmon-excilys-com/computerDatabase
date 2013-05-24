@@ -1,6 +1,5 @@
 package excilys.main.orm;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import excilys.main.pojo.Computer;
 import excilys.main.service.Useful;
 
 @Repository
 @Scope("singleton")
-@Transactional
 public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	private static final String DELETE_COMPUTER = "DELETE FROM `computerDatabase`.`computer` WHERE id = ?;";
 	private static final String INSERT_COMPUTER = "INSERT INTO `computerDatabase`.`computer` (`name`, `introduced`, `discontinued`, `company_id`) VALUES (?, ?, ?, ?);";
@@ -47,7 +43,6 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<Computer> getListComputersSlice(Integer starter, Integer s,
 			String clause) throws Exception {
 
@@ -72,7 +67,6 @@ public class ImplementationComputerDAO implements InterfaceComputerDAO {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Computer getComputerByID(Integer ID) throws Exception {
 
 		jdbc = new JdbcTemplate(ds);
@@ -92,13 +86,13 @@ try{
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Integer getSizeComputers(String clause) throws Exception {
 		jdbc = new JdbcTemplate(ds);
 		ArrayList<Object> insert = new ArrayList<Object>();
 		insert.add(clause);
 		
 		try{
+			//TODO deprecated
 		@SuppressWarnings("deprecation")
 		int result = jdbc.queryForInt(COUNT_COMPUTERS, insert.toArray());
 		return result;
@@ -111,7 +105,6 @@ try{
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void saveComputer(Computer cp, boolean newCp) throws Exception {
 		
 		jdbc = new JdbcTemplate(ds);
@@ -133,8 +126,6 @@ try{
 		} else {
 			insert.add(cp.getId());
 			jdbc.update(UPDATE_COMPUTER, insert.toArray());
-			//TODO TEST
-//			throw new Exception();
 		}
 		} catch (Exception e) {
 			logger.error("Erreur de sauvegarde des ordinateurs"
@@ -145,7 +136,6 @@ try{
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
 	public void deleteComputerByID(Integer id) throws Exception {
 		jdbc = new JdbcTemplate(ds);
 		ArrayList<Object> insert = new ArrayList<Object>();

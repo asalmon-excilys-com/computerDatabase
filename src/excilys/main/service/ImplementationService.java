@@ -6,13 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import excilys.main.orm.InterfaceCompanyDAO;
 import excilys.main.orm.InterfaceComputerDAO;
@@ -21,6 +21,7 @@ import excilys.main.pojo.Page;
 
 @Service
 @Scope("singleton")
+@Transactional(readOnly = true)
 public class ImplementationService implements InterfaceService {
 
 	private static final Logger logger = LoggerFactory
@@ -30,8 +31,6 @@ public class ImplementationService implements InterfaceService {
 	InterfaceCompanyDAO companyDAO;
 	@Autowired
 	InterfaceComputerDAO computerDAO;
-	@Autowired
-	DataSource ds;
 
 public ImplementationService() {
 	}
@@ -52,14 +51,6 @@ public ImplementationService() {
 		this.computerDAO = implDAO;
 	}
 
-	public DataSource getGesco() {
-		return ds;
-	}
-
-	public void setGesco(DataSource gesco) {
-		this.ds = gesco;
-	}
-
 	@Override
 	public Page ConstructionTableauAccueil(HttpServletRequest request) throws Exception {
 
@@ -78,6 +69,7 @@ public ImplementationService() {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void DeleteComputer(HttpServletRequest request) throws Exception{
 
 		Integer id = Integer.parseInt(request.getParameter("id"));
@@ -85,12 +77,6 @@ public ImplementationService() {
 			computerDAO.deleteComputerByID(id);
 		} catch (Exception e) {
 			logger.error("Erreur de suppression d'un computer" + e.getMessage());
-			try {
-				ds.getConnection().rollback();
-			} catch (Exception e1) {
-				logger.error("Erreur de rollback" + e1.getMessage());
-				throw e1;
-			}
 			throw e;}
 
 	}
@@ -103,15 +89,16 @@ public ImplementationService() {
 		page.setCompanies(companyDAO.getListCompanies());
 
 		if (request.getParameter("id") == null) {
-			page.setUrl("/NewComputer.jsp");
+			page.setUrl("/jsp/NewComputer.jsp");
 		} else {
 			Integer id = Integer.parseInt(request.getParameter("id"));
 			page.setCp(computerDAO.getComputerByID(id));
-			page.setUrl("/Computer.jsp");
+			page.setUrl("/jsp/Computer.jsp");
 		}
 		return page;
 	}
 
+	@Transactional(readOnly = false)
 	public boolean SaveComputer(HttpServletRequest request) throws Exception{
 
 		boolean error = false;

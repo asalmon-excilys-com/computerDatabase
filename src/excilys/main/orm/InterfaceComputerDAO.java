@@ -1,6 +1,5 @@
 package excilys.main.orm;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import excilys.main.pojo.Computer;
