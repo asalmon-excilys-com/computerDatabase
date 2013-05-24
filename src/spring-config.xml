@@ -12,7 +12,7 @@
       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="excilys.main" />
+	<context:component-scan base-package="main.java" />
 	<tx:annotation-driven transaction-manager="txManager" />
 
 	<bean id="aDataSource"
