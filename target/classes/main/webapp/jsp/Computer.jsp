@@ -16,7 +16,7 @@
 
 	<header class="topbar">
 		<h1 class="fill">
-			<a href="TableauComputerServlet"> Play 2.0 sample application
+			<a href="TableauComputer.html"> Play 2.0 sample application
 				&mdash; Computer database </a>
 		</h1>
 	</header>
@@ -29,7 +29,7 @@
 
 
 
-		<form action="saveComputer?id=${page.cp.id}" method="POST">
+		<form action="saveComputer.html?id=${page.cp.id}" method="POST">
 
 
 			<fieldset>
@@ -100,7 +100,7 @@
 
 			<div class="actions">
 				<input type="submit" value="Save this computer" class="btn primary">
-				or <a href="TableauComputerServlet" class="btn">Cancel</a>
+				or <a href="TableauComputer.html" class="btn">Cancel</a>
 			</div>
 
 
@@ -109,7 +109,7 @@
 
 
 
-		<form action="delete?id=${page.cp.id}" method="POST" class="topRight">
+		<form action="delete.html?id=${page.cp.id}" method="POST" class="topRight">
 
 			<input type="submit" value="Delete this computer" class="btn danger">
 

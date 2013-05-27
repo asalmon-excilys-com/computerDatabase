@@ -89,11 +89,11 @@ public ImplementationService() {
 		page.setCompanies(companyDAO.getListCompanies());
 
 		if (request.getParameter("id") == null) {
-			page.setUrl("/jsp/NewComputer.jsp");
+			page.setUrl("NewComputer");
 		} else {
 			Integer id = Integer.parseInt(request.getParameter("id"));
 			page.setCp(computerDAO.getComputerByID(id));
-			page.setUrl("/jsp/Computer.jsp");
+			page.setUrl("Computer");
 		}
 		return page;
 	}

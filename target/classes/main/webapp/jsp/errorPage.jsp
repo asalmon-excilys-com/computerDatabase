@@ -13,7 +13,7 @@
 
 	<header class="topbar">
 	<h1 class="fill">
-		<a href="TableauComputerServlet"> Play 2.0 sample application
+		<a href="TableauComputer.html"> Play 2.0 sample application
 			&mdash; Computer database </a>
 	</h1>
 	</header>

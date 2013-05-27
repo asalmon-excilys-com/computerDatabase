@@ -44,7 +44,6 @@ public class TableauComputerServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		if (context == null){
 			context = new ClassPathXmlApplicationContext("spring-config.xml");
-        }  if (context != null){
         }
 		
 		InterfaceService implServ = context.getBean(main.java.service.InterfaceService.class);

@@ -17,7 +17,7 @@
 
 	<header class="topbar">
 	<h1 class="fill">
-		<a href="TableauComputerServlet"> Play 2.0 sample application
+		<a href="TableauComputer.html"> Play 2.0 sample application
 			&mdash; Computer database </a>
 	</h1>
 	</header>
@@ -34,7 +34,7 @@
 
 
 
-		<form action="TableauComputerServlet" method="GET">
+		<form action="TableauComputer.html" method="GET">
 
 			<input type="search" id="searchbox" name="f" value="${page.f}"
 				placeholder="Filter by computer name..."> <input
@@ -45,7 +45,7 @@
 		</form>
 
 
-		<a class="btn success" id="add" href="ModifyOrAdd">Add a new computer</a>
+		<a class="btn success" id="add" href="ModifyOrAdd.html">Add a new computer</a>
 
 	</div>
 
@@ -63,7 +63,7 @@
 			<c:forEach items="${page.computers}" var="rs">
 				<tr>
 					<%-- 					<td><c:out value="${rs.name}"></c:out></td> --%>
-					<td><a href="ModifyOrAdd?id=${rs.id}">${rs.name}</a></td>
+					<td><a href="ModifyOrAdd.html?id=${rs.id}">${rs.name}</a></td>
 					<td><c:choose>
 							<c:when test="${rs.introduced == null}">
 								<em>-</em>
@@ -104,7 +104,7 @@
 				</c:when>
 				<c:otherwise>
 					<li class="prev"><a
-						href="TableauComputerServlet?p=${page.p-1}&s=${page.s}&f=${page.f}">&larr;
+						href="TableauComputer.html?p=${page.p-1}&s=${page.s}&f=${page.f}">&larr;
 							Previous</a></li>
 				</c:otherwise>
 			</c:choose>
@@ -121,7 +121,7 @@
 					<li class="current"><a>Displaying ${page.starter+1} to
 							${page.starter+10} of ${page.tailleTable}</a></li>
 					<li class="next"><a
-						href="TableauComputerServlet?p=${page.p+1}&s=${page.s}&f=${page.f}">Next
+						href="TableauComputer.html?p=${page.p+1}&s=${page.s}&f=${page.f}">Next
 							&rarr;</a></li>
 				</c:otherwise>
 			</c:choose>

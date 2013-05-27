@@ -64,16 +64,16 @@ public class AffichageTriTaglib extends TagSupport {
 
 		try {
 			out.println("<th class=\"col2 header " + stringCol[0]
-					+ "\"><a href=\"TableauComputerServlet?s=" + tabCol[0]
+					+ "\"><a href=\"TableauComputer.html?s=" + tabCol[0]
 					+ "&f=" + f + "\">Computer name</a></th>");
 			out.println("<th class=\"col3 header " + stringCol[1]
-					+ "\"><a href=\"TableauComputerServlet?s=" + tabCol[1]
+					+ "\"><a href=\"TableauComputer.html?s=" + tabCol[1]
 					+ "&f=" + f + "\">Introduced</a></th>");
 			out.println("<th class=\"col4 header " + stringCol[2]
-					+ "\"><a href=\"TableauComputerServlet?s=" + tabCol[2]
+					+ "\"><a href=\"TableauComputer.html?s=" + tabCol[2]
 					+ "&f=" + f + "\">Discontinued</a></th>");
 			out.println("<th class=\"col5 header " + stringCol[3]
-					+ "\"><a href=\"TableauComputerServlet?s=" + tabCol[3]
+					+ "\"><a href=\"TableauComputer.html?s=" + tabCol[3]
 					+ "&f=" + f + "\">Company</a></th>");
 
 		} catch (IOException e) {
