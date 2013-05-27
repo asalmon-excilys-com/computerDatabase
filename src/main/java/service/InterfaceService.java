@@ -1,14 +1,17 @@
 package main.java.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 
 import main.java.pojo.Page;
 
-
 public interface InterfaceService {
-	
-	public Page ConstructionTableauAccueil(HttpServletRequest request) throws Exception;
-	public void DeleteComputer(HttpServletRequest request) throws Exception;
-	public Page ModifyOrAddComputer(HttpServletRequest request) throws Exception;
-	public boolean SaveComputer(HttpServletRequest request) throws Exception;
+
+	Page ConstructionTableauAccueil(Page page) throws Exception;
+
+	Page ModifyOrAddComputer(Integer id) throws Exception;
+
+	void DeleteComputer(Integer id) throws Exception;
+
+	void SaveComputer(Integer id, String name, Calendar introduced,
+			Calendar discontinued, String company_id) throws Exception;
 }

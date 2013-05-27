@@ -9,10 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.pojo.Page;
-import main.java.service.Useful;
 
 public class AffichageTriTaglib extends TagSupport {
-			final static Logger logger = LoggerFactory
+	final static Logger logger = LoggerFactory
 			.getLogger(AffichageTriTaglib.class);
 	private static final long serialVersionUID = 1L;
 
@@ -20,10 +19,16 @@ public class AffichageTriTaglib extends TagSupport {
 
 		JspWriter out = pageContext.getOut();
 		Page page = (Page) pageContext.getRequest().getAttribute("page");
-		Integer s = Useful.gestionNull(page.getS());
-		
 
-		String f = Useful.gestionNullClause(page.getF());
+		Integer s = 0;
+		if (page.getS() != null) {
+			s = page.getS();
+		}
+
+		String f = "";
+		if (page.getF() != null) {
+			f = page.getF();
+		}
 
 		Integer[] tabCol = { 0, 3, 4, 5 };
 
@@ -77,8 +82,7 @@ public class AffichageTriTaglib extends TagSupport {
 					+ "&f=" + f + "\">Company</a></th>");
 
 		} catch (IOException e) {
-			logger.error("Erreur de gestion headers"
-					+ e.getMessage());
+			logger.error("Erreur de gestion headers" + e.getMessage());
 		}
 		return SKIP_BODY;
 	}

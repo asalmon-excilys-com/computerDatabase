@@ -141,5 +141,7 @@ try{
 		insert.add(id);
 		jdbc.update(DELETE_COMPUTER, insert.toArray());
 	}
+	
+	
 
 }

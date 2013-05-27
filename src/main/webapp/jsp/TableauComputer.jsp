@@ -112,14 +112,14 @@
 
 
 			<c:choose>
-				<c:when test="${page.starter+10 > page.tailleTable }">
-					<li class="current"><a>Displaying ${page.starter+1} to
+				<c:when test="${page.p*10+10 > page.tailleTable }">
+					<li class="current"><a>Displaying ${page.p*10+1} to
 							${page.tailleTable} of ${page.tailleTable}</a></li>
 					<li class="next disabled"><a>Next &rarr;</a></li>
 				</c:when>
 				<c:otherwise>
-					<li class="current"><a>Displaying ${page.starter+1} to
-							${page.starter+10} of ${page.tailleTable}</a></li>
+					<li class="current"><a>Displaying ${page.p*10+1} to
+							${page.p*10+10} of ${page.tailleTable}</a></li>
 					<li class="next"><a
 						href="TableauComputer.html?p=${page.p+1}&s=${page.s}&f=${page.f}">Next
 							&rarr;</a></li>

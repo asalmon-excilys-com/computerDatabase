@@ -1,11 +1,6 @@
 package main.java.service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,15 +21,15 @@ public class ImplementationService implements InterfaceService {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ImplementationService.class);
-	
+
 	@Autowired
 	InterfaceCompanyDAO companyDAO;
 	@Autowired
 	InterfaceComputerDAO computerDAO;
 
-public ImplementationService() {
+	public ImplementationService() {
 	}
-	
+
 	public InterfaceCompanyDAO getDAOcompany() {
 		return companyDAO;
 	}
@@ -52,129 +47,71 @@ public ImplementationService() {
 	}
 
 	@Override
-	public Page ConstructionTableauAccueil(HttpServletRequest request) throws Exception {
+	public Page ConstructionTableauAccueil(Page page) throws Exception {
 
-		Page page = new Page();
+		page.setTailleTable(computerDAO.getSizeComputers("%" + page.getF()
+				+ "%"));
 
-		page.setS(UtilitaireService.gestionNull(request.getParameter("s")));
-		page.setP(UtilitaireService.gestionNull(request.getParameter("p")));
-		page.setStarter(UtilitaireService.gestionStarter(page.getP()));
-		page.setF(UtilitaireService.gestionNullClause(request.getParameter("f")));
-
-		page.setTailleTable(computerDAO.getSizeComputers("%" + page.getF() + "%"));
-
-		page.setComputers(computerDAO.getListComputersSlice(page.getStarter(),
+		page.setComputers(computerDAO.getListComputersSlice(page.getP() * 10,
 				page.getS(), "%" + page.getF() + "%"));
 		return page;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void DeleteComputer(HttpServletRequest request) throws Exception{
-
-		Integer id = Integer.parseInt(request.getParameter("id"));
+	public void DeleteComputer(Integer id) throws Exception {
 		try {
 			computerDAO.deleteComputerByID(id);
 		} catch (Exception e) {
 			logger.error("Erreur de suppression d'un computer" + e.getMessage());
-			throw e;}
+			throw e;
+		}
 
 	}
 
 	@Override
-	public Page ModifyOrAddComputer(HttpServletRequest request) throws Exception{
+	public Page ModifyOrAddComputer(Integer id) throws Exception {
 
 		Page page = new Page();
 
 		page.setCompanies(companyDAO.getListCompanies());
 
-		if (request.getParameter("id") == null) {
+		// TODO et si l'id n'est pas dasn le range de la base? genre négative
+
+		if (id == 0) {
 			page.setUrl("NewComputer");
 		} else {
-			Integer id = Integer.parseInt(request.getParameter("id"));
 			page.setCp(computerDAO.getComputerByID(id));
 			page.setUrl("Computer");
 		}
 		return page;
 	}
 
+	@Override
 	@Transactional(readOnly = false)
-	public boolean SaveComputer(HttpServletRequest request) throws Exception{
+	public void SaveComputer(Integer id, String name, Calendar introduced,
+			Calendar discontinued, String company_id) throws Exception {
 
-		boolean error = false;
-		String name = null;
-		// name
-		if (request.getParameter("name") == null
-				|| request.getParameter("name").trim().length() == 0) {
-			error = true;
-			request.setAttribute("nameError", "error");
+		Computer cp;
+
+		boolean newCp;
+
+		if (id == 0) {
+			cp = new Computer(name, introduced, discontinued, company_id);
+			newCp = true;
 		} else {
-			name = request.getParameter("name");
-		}
-
-		// compagnie
-		// Inutile car ne dépend pas de l'utilisateur il ne peut faire
-		// d'injection
-		String company_id = request.getParameter("company");
-
-		// dates
-		SimpleDateFormat df = (SimpleDateFormat) DateFormat.getDateInstance();
-		df.applyPattern("yyyy-MM-dd");
-		df.setLenient(false);
-		Calendar introduced = Calendar.getInstance();
-		Calendar discontinued = Calendar.getInstance();
-
-		if (request.getParameter("introduced").isEmpty()) {
-			introduced = null;
-		} else {
-			try {
-				introduced
-						.setTime(df.parse(request.getParameter("introduced")));
-			} catch (ParseException e) {
-				error = true;
-				request.setAttribute("introducedError", "error");
-			}
-		}
-
-		if (request.getParameter("discontinued").isEmpty()) {
-			discontinued = null;
-		} else {
-			try {
-				discontinued.setTime(df.parse(request
-						.getParameter("discontinued")));
-			} catch (ParseException e) {
-				error = true;
-				request.setAttribute("discontinuedError", "error");
-			}
-		}
-
-		if (!error) {
-			Computer cp;
-
-			boolean newCp;
-
-			if (request.getParameter("id") == null) {
-				cp = new Computer(name, introduced, discontinued, company_id);
-				newCp = true;
-			} else {
-				String id = request.getParameter("id");
-				cp = new Computer(id, name, introduced, discontinued,
-						company_id);
-				newCp = false;
-
-			}
-
-			try {
-				computerDAO.saveComputer(cp, newCp);
-			} catch (Exception e) {
-				logger.error("Erreur de sauvegarde des ordinateurs"
-						+ e.getMessage());
-				throw e;
-			}
+			cp = new Computer(id, name, introduced, discontinued, company_id);
+			newCp = false;
 
 		}
 
-		return error;
+		try {
+			computerDAO.saveComputer(cp, newCp);
+		} catch (Exception e) {
+			logger.error("Erreur de sauvegarde des ordinateurs"
+					+ e.getMessage());
+			throw e;
+		}
 
 	}
 

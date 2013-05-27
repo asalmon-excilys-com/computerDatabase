@@ -105,9 +105,9 @@ public class Computer {
 		this.company = new Company(company_id, name_company);
 	}
 
-	public Computer(String id, String name, Calendar introduced,Calendar discontinued, String company_id) {
+	public Computer(Integer id, String name, Calendar introduced,Calendar discontinued, String company_id) {
 		
-		this(StringToInteger(id), name, introduced,
+		this(id, name, introduced,
 				discontinued, StringToInteger(company_id),
 				"");
 		

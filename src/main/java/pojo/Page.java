@@ -7,7 +7,6 @@ public class Page {
 	private Integer p;
 	private String f;
 	private Integer tailleTable;
-	private Integer starter;
 	private List<Computer> computers;
 	private List<Company> companies;
 	private Computer cp;
@@ -36,12 +35,6 @@ public class Page {
 	}
 	public void setTailleTable(Integer tailleTable) {
 		this.tailleTable = tailleTable;
-	}
-	public Integer getStarter() {
-		return starter;
-	}
-	public void setStarter(Integer starter) {
-		this.starter = starter;
 	}
 	public List<Computer> getComputers() {
 		return computers;
